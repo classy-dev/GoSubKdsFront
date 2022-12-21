@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {Route, useHistory} from 'react-router-dom';
+import {ToastContainer} from 'react-toastify';
+import {
+  QueryClient,
+  QueryClientProvider,
+  QueryCache,
+} from '@tanstack/react-query';
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
+import Home from 'PagesFarm/Home';
+import Login from 'PagesFarm/Login';
+import 'react-toastify/dist/ReactToastify.css';
 
-function App() {
+const App = () => {
+  const history = useHistory();
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+    queryCache: new QueryCache({
+      onError: (e: any) => {
+        // history.push('/');
+        console.error(e);
+      },
+    }),
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <ToastContainer position="top-center" />
+      <Route path="/" exact={true} component={Login} />
+      <Route path="/home" exact={true} component={Home} />
+
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   );
-}
+};
 
 export default App;
