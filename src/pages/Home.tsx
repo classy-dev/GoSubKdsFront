@@ -81,7 +81,7 @@ function Home() {
           />
 
           <SubKdsContent>
-            {data?.list?.length !== 0 ? (
+            {data?.list?.length === 0 ? (
               <div className="noOrder">
                 <div className="title">
                   <img src="/images/intro-title.png" alt="1인피자의 시작" />
