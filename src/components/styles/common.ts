@@ -162,14 +162,19 @@ export const Header = styled.header`
 export const SubKdsContent = styled.div`
   height: calc(100vh - 10rem);
   background: #061138; //E0E0E0  //#061138
-  .noData {
+  .noOrder {
     display: flex;
+    flex-direction: column;
     width: 100vw;
     height: 100%;
     align-items: center;
     justify-content: center;
     color: #fff;
     font-size: 24px;
+
+    .title {
+      margin-bottom: 30px;
+    }
   }
 `;
 

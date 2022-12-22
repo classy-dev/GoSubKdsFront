@@ -81,8 +81,15 @@ function Home() {
           />
 
           <SubKdsContent>
-            {data?.list?.length === 0 ? (
-              <div className="noData">처리 및 대기 중인 아이템이 없습니다.</div>
+            {data?.list?.length !== 0 ? (
+              <div className="noOrder">
+                <div className="title">
+                  <img src="/images/intro-title.png" alt="1인피자의 시작" />
+                </div>
+                <div className="logo">
+                  <img src="/images/intro-logo.png" alt="GOPIZZA" />
+                </div>
+              </div>
             ) : (
               <SwiperContainer
                 className="mySwiper"
