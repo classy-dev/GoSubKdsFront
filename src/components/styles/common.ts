@@ -239,7 +239,7 @@ export const ReceiptWrap = styled.div`
       * {
         color: #fff;
       }
-      background: rgba(0, 0, 0, 0.7);
+      background: #000;
     }
 
     .item_name {
