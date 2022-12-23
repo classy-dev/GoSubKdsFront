@@ -3,6 +3,9 @@ import {Header} from './styles/common';
 import {Swiper} from 'swiper/types';
 import {useQueryClient} from '@tanstack/react-query';
 import {menu} from 'PagesFarm/Home';
+import {kdsSettingStore} from 'MobxFarm/store';
+import {runInAction} from 'mobx';
+import {observer} from 'mobx-react';
 
 // const status = [{id:1, txt: '완료 대기 중', status:"finWait"} , '처리 중', '처리 대기 중'];
 const status = [
@@ -37,6 +40,14 @@ function KdsHeader({
     setAreaNumber(idx);
   };
 
+  const handlerAlarm = () => {
+    runInAction(() =>
+      kdsSettingStore.alarm
+        ? (kdsSettingStore.alarm = false)
+        : (kdsSettingStore.alarm = true),
+    );
+  };
+
   return (
     <Header>
       <div className="left">
@@ -58,6 +69,13 @@ function KdsHeader({
               </span>
             </li>
           ))}
+          <li>
+            <button
+              className={`btn_speak ${kdsSettingStore.alarm ? 'on' : ''}`}
+              onClick={handlerAlarm}>
+              <span className="hiddenZone">Alarm</span>
+            </button>
+          </li>
         </ul>
       </div>
       <div className="right">
@@ -76,4 +94,4 @@ function KdsHeader({
   );
 }
 
-export default KdsHeader;
+export default observer(KdsHeader);

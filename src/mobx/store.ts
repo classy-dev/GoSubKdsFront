@@ -104,3 +104,7 @@ export const authStore = observable({
     );
   },
 });
+
+export const kdsSettingStore = observable({
+  alarm: false,
+});

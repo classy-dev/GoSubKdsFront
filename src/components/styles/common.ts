@@ -143,6 +143,19 @@ export const Header = styled.header`
         }
       }
     }
+
+    .btn_speak {
+      width: 40px;
+      height: 40px;
+      margin-right: 30px;
+      background: url('/images/ico_volume_mute.svg') no-repeat left center;
+      background-size: 40px 40px;
+
+      &.on {
+        background: url('/images/ico_volume.svg') no-repeat left center;
+        background-size: 40px 40px;
+      }
+    }
   }
 
   .right {
@@ -173,7 +186,7 @@ export const SubKdsContent = styled.div`
     font-size: 24px;
 
     .title {
-      margin-bottom: 30px;
+      margin: -65px 0 30px;
     }
   }
 `;
