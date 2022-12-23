@@ -91,7 +91,7 @@ function Receipt({
   //벨소리 컨트롤 - subkds의 경우, 한번에 여러 아이템이 들어오기때문에, currentTime을 통해서 울리고 있는지 체킹 후, 울리는동안 안울리게.
   useEffect(() => {
     if (bell) {
-      if (kdsSettingStore.alarm && audioRef.current?.paused) {
+      if (kdsSettingStore.alarm) {
         audioRef.current?.play();
         (audioRef.current as any).currentTime = 0;
       }
