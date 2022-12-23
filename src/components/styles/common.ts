@@ -145,15 +145,15 @@ export const Header = styled.header`
     }
 
     .btn_speak {
-      width: 40px;
-      height: 40px;
-      margin-right: 30px;
+      width: 4rem;
+      height: 4rem;
+      margin-right: 3rem;
       background: url('/images/ico_volume_mute.svg') no-repeat left center;
-      background-size: 40px 40px;
+      background-size: 4rem;
 
       &.on {
         background: url('/images/ico_volume.svg') no-repeat left center;
-        background-size: 40px 40px;
+        background-size: 4rem;
       }
     }
   }
