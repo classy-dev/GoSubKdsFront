@@ -15,7 +15,11 @@ function SwiperSlideItem({receiptsData, areaNumber}: ISwiperSlideItem) {
     <SlidePageWrap className={`SlidePage`}>
       {receiptsData.length !== 0 &&
         receiptsData.map((el: ISubkdsListItem) => (
-          <Receipt data={el} areaNumber={areaNumber} />
+          <Receipt
+            key={el.receipt_item_contents_idx}
+            data={el}
+            areaNumber={areaNumber}
+          />
         ))}
       {/* <ReceiptHandlerPopup /> */}
     </SlidePageWrap>

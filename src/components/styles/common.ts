@@ -247,14 +247,6 @@ export const ReceiptWrap = styled.div`
     justify-content: center;
     color: #4f4f4f;
 
-    &:hover,
-    &:active {
-      * {
-        color: #fff;
-      }
-      background: #000;
-    }
-
     .item_name {
       display: flex;
       align-items: center;
