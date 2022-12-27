@@ -74,7 +74,6 @@ function Receipt({
       if (1 > Number(bellTime[0]) && 9 >= Number(bellTime[1]) && !bell) {
         setBell(true);
       } else if (Number(bellTime[1]) > 10 && bell) {
-        console.log('종료');
         setBell(false);
       }
     } else {
@@ -82,7 +81,6 @@ function Receipt({
       if (1 > Number(stationTime[0]) && 9 >= Number(stationTime[1]) && !bell) {
         setBell(true);
       } else if (Number(stationTime[1]) > 10 && bell) {
-        console.log('종료');
         setBell(false);
       }
     }

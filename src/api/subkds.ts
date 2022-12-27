@@ -21,19 +21,10 @@ export const fetchSubKdsProcess = async ({
   receipt_item_contents_idx: number;
   process_status: number;
 }) => {
-  console.log(
-    'receipt_item_contents_idx',
-    receipt_item_contents_idx,
-    'process_status',
-    process_status,
-  );
-
   const response = await AxiosUtil.put(
     `/kds/v1/local/proc/${receipt_item_contents_idx}`,
     {process_status},
   );
-
-  console.log(response);
 
   return response.data.data;
 };

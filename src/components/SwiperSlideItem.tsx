@@ -9,8 +9,6 @@ interface ISwiperSlideItem {
 }
 
 function SwiperSlideItem({receiptsData, areaNumber}: ISwiperSlideItem) {
-  // console.log('receiptsData', receiptsData);
-
   return (
     <SlidePageWrap className={`SlidePage`}>
       {receiptsData.length !== 0 &&

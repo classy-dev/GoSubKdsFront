@@ -36,8 +36,6 @@ function Home() {
   const [swiperRef, setSwiperRef] = useState<Swiper | null>(null);
   const [slideIdx, setSlideIdx] = useState(0);
 
-  // console.log('areaNumber', areaNumber);
-
   // 영수증 리스트
   const {data, refetch, isFetching} = useQuery<ISubkdsListRes, AxiosError>(
     ['subKdsListData'],
@@ -65,8 +63,6 @@ function Home() {
   useEffect(() => {
     refetch();
   }, [areaNumber]);
-
-  // console.log('data?.list', data?.list);
 
   return (
     <div>
