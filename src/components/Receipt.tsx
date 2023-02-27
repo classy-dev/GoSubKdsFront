@@ -43,7 +43,14 @@ function Receipt({
     // duration in seconds
     var seconds = Math.floor(duration.asSeconds()) % 60;
 
-    return `${minutes} : ${10 > seconds ? '0' + seconds : seconds}`;
+    return hours
+      ? `${hours} :` +
+          `${minutes > 9 ? minutes : '0' + minutes} : ${
+            seconds > 9 ? seconds : '0' + seconds
+          }`
+      : `${minutes > 9 ? minutes : '0' + minutes} : ${
+          seconds > 9 ? seconds : '0' + seconds
+        }`;
   }, []);
 
   useEffect(() => {
@@ -130,7 +137,7 @@ function Receipt({
       }>
       <div
         className={`info_head ${
-          Number(showTime.substring(0, 2)) >= 30
+          showTime.length > 7 || Number(showTime.substring(0, 2)) >= 30
             ? 'alert'
             : 30 > Number(showTime.substring(0, 2)) &&
               Number(showTime.substring(0, 2)) > 20

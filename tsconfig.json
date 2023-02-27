@@ -16,7 +16,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsxImportSource": "@emotion/react",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "incremental": true
   },
   "include": ["src", "pages", "components", "src/components/.tsx"]
 }

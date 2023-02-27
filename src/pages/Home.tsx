@@ -16,6 +16,8 @@ import {Swiper} from 'swiper/types';
 import {Mousewheel} from 'swiper';
 import 'swiper/css';
 import SwiperSlideItem from 'ComponentsFarm/SwiperSlideItem';
+import {authStore} from 'MobxFarm/store';
+import {useHistory} from 'react-router-dom';
 
 export const menu = [
   {idx: 1, areaName: 'AISTT'},
@@ -25,6 +27,7 @@ export const menu = [
 ];
 
 function Home() {
+  const history = useHistory();
   const [infoStatus, setInfoStatus] = useState({
     ing: 0,
     wait: 0,
@@ -35,6 +38,13 @@ function Home() {
   const Grid = 16;
   const [swiperRef, setSwiperRef] = useState<Swiper | null>(null);
   const [slideIdx, setSlideIdx] = useState(0);
+
+  //셋팅 값 가져오기
+  useEffect(() => {
+    if (!authStore.session) {
+      return history.push('/');
+    }
+  }, [history]);
 
   // 영수증 리스트
   const {data, refetch, isFetching} = useQuery<ISubkdsListRes, AxiosError>(
