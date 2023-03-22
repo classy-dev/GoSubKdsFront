@@ -48,6 +48,8 @@ function KdsHeader({
     );
   };
 
+  console.log('swiperRef?.realIndex', swiperRef);
+
   return (
     <Header>
       <div className="left">
@@ -58,8 +60,9 @@ function KdsHeader({
           {menu.filter(el => el.idx === areaNumber)[0].areaName}
         </span>
         <span className="page_info">
-          PAGE ( {totalCount ? Number(swiperRef?.realIndex) + 1 : 1} /{' '}
-          {totalCount ? totalCount : 1})
+          {/* PAGE ( {totalCount ? Number(swiperRef?.realIndex) + 1 : 1} /{' '}
+          {totalCount ? totalCount : 1}) */}
+          PAGE {String(swiperRef?.realIndex) + '/' + String(totalCount)}
         </span>
         <ul className="status">
           {status.map(el => (

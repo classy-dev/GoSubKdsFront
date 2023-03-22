@@ -127,10 +127,16 @@ function Receipt({
   }, [areaNumber]);
 
   return (
+    // <ReceiptWrap
+    //   className={`${data.process_status === 1 ? 'fin' : ''} ${
+    //     areaNumber === 2 && data.process_status === 0 ? 'showNone' : ''
+    //   }`}
+    //   onClick={() =>
+    //     data.process_status === 0 &&
+    //     handlerProccessing(data.receipt_item_contents_idx, 1)
+    //   }>
     <ReceiptWrap
-      className={`${data.process_status === 1 ? 'fin' : ''} ${
-        areaNumber === 2 && data.process_status === 0 ? 'showNone' : ''
-      }`}
+      className={`${data.process_status === 1 ? 'fin' : ''}`}
       onClick={() =>
         data.process_status === 0 &&
         handlerProccessing(data.receipt_item_contents_idx, 1)
