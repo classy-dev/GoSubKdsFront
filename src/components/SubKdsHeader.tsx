@@ -16,6 +16,7 @@ const number = [1, 9, 13];
 
 interface IinfoStatus {
   swiperRef: Swiper | null;
+  slideIdx: number;
   areaNumber: number;
   setAreaNumber: Dispatch<SetStateAction<number>>;
   infoStatus: {
@@ -28,6 +29,7 @@ interface IinfoStatus {
 
 function KdsHeader({
   swiperRef,
+  slideIdx,
   areaNumber,
   setAreaNumber,
   infoStatus,
@@ -60,12 +62,7 @@ function KdsHeader({
           {menu.filter(el => el.idx === areaNumber)[0].areaName}
         </span>
         <span className="page_info">
-          PAGE
-          {String(
-            swiperRef?.realIndex === undefined ? 1 : swiperRef?.realIndex + 1,
-          ) +
-            '/' +
-            String(totalCount)}
+          PAGE ( {Number(slideIdx) + 1} / {totalCount} )
         </span>
         <ul className="status">
           {status.map(el => (

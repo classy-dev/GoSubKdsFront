@@ -39,6 +39,8 @@ function Home() {
   const [swiperRef, setSwiperRef] = useState<Swiper | null>(null);
   const [slideIdx, setSlideIdx] = useState(0);
 
+  console.log('slideIdx slideIdx slideIdx', slideIdx);
+
   //셋팅 값 가져오기
   useEffect(() => {
     if (!authStore.session) {
@@ -80,6 +82,7 @@ function Home() {
         <SubKdsWrap>
           <SubKdsHeader
             swiperRef={swiperRef}
+            slideIdx={slideIdx}
             infoStatus={infoStatus}
             areaNumber={areaNumber}
             setAreaNumber={setAreaNumber}

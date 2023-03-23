@@ -102,6 +102,7 @@ function Receipt({
       }
 
       toast.info('새로운 주문이 들어왔습니다.');
+      toast.clearWaitingQueue();
     }
   }, [bell]);
 
