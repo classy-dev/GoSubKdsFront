@@ -18,14 +18,14 @@ const getBaseUrl = () => {
   const hostSplit = host?.split('.');
 
   if (hostSplit && hostSplit[0] === 'dev') {
-    reVal = 'http://192.168.10.131:8000';
+    reVal = 'http://dev.api.gopizza.kr';
   } else if (
     (hostSplit && hostSplit[0] === '192') ||
     (hostSplit && hostSplit[0].indexOf('localhost') >= 0) ||
     (hostSplit && hostSplit[0] === 'local')
   ) {
     //reVal = 'http://dev.api.gopizza.kr';
-    reVal = 'http://192.168.10.131:8000';
+    reVal = 'http://dev.api.gopizza.kr';
     //reVal = "http://api.gopizza.kr";
     // reVal = "http://192.168.0.10:8000";
   }
