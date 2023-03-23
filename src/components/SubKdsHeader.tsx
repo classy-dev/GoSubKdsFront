@@ -60,9 +60,12 @@ function KdsHeader({
           {menu.filter(el => el.idx === areaNumber)[0].areaName}
         </span>
         <span className="page_info">
-          {/* PAGE ( {totalCount ? Number(swiperRef?.realIndex) + 1 : 1} /{' '}
-          {totalCount ? totalCount : 1}) */}
-          PAGE {String(swiperRef?.realIndex) + '/' + String(totalCount)}
+          PAGE
+          {String(
+            swiperRef?.realIndex === undefined ? 1 : swiperRef?.realIndex + 1,
+          ) +
+            '/' +
+            String(totalCount)}
         </span>
         <ul className="status">
           {status.map(el => (

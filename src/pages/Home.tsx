@@ -64,8 +64,8 @@ function Home() {
   useEffect(() => {
     if (data) {
       setInfoStatus({
-        ing: data.list.filter(el => el.process_start_date !== '').length,
-        wait: data.list.filter(el => el.process_start_date === '').length,
+        ing: data.list.filter(el => el.process_status === 1).length,
+        wait: data.list.filter(el => el.process_status === 0).length,
       });
     }
   }, [data]);
