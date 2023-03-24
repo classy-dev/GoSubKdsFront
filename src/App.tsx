@@ -29,7 +29,7 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ToastContainer position="top-center" limit={1} />
+      <ToastContainer position="top-center" />
       <Route path="/" exact={true} component={Login} />
       <Route path="/home" exact={true} component={Home} />
 
