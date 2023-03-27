@@ -75,23 +75,32 @@ function Receipt({
   }, [time, data]);
 
   //주문들어왔는지 체킹, AISTT 에서 STATION 으로 넘어오는데, STATION 신규주문은 processTime을 통해 알 수 있음.
+  // useEffect(() => {
+  //   if (areaNumber !== 2) {
+  //     const bellTime = showTime.split(':');
+  //     if (1 > Number(bellTime[0]) && 9 >= Number(bellTime[1]) && !bell) {
+  //       setBell(true);
+  //     } else if (Number(bellTime[1]) > 10 && bell) {
+  //       setBell(false);
+  //     }
+  //   } else {
+  //     const stationTime = processTime.split(':');
+  //     if (1 > Number(stationTime[0]) && 9 >= Number(stationTime[1]) && !bell) {
+  //       setBell(true);
+  //     } else if (Number(stationTime[1]) > 10 && bell) {
+  //       setBell(false);
+  //     }
+  //   }
+  // }, [areaNumber, bell, showTime]);
+
   useEffect(() => {
-    if (areaNumber !== 2) {
-      const bellTime = showTime.split(':');
-      if (1 > Number(bellTime[0]) && 9 >= Number(bellTime[1]) && !bell) {
-        setBell(true);
-      } else if (Number(bellTime[1]) > 10 && bell) {
-        setBell(false);
-      }
-    } else {
-      const stationTime = processTime.split(':');
-      if (1 > Number(stationTime[0]) && 9 >= Number(stationTime[1]) && !bell) {
-        setBell(true);
-      } else if (Number(stationTime[1]) > 10 && bell) {
-        setBell(false);
-      }
+    const bellTime = showTime.split(':');
+    if (1 > Number(bellTime[0]) && 9 >= Number(bellTime[1]) && !bell) {
+      setBell(true);
+    } else if (Number(bellTime[1]) > 10 && bell) {
+      setBell(false);
     }
-  }, [areaNumber, bell, showTime]);
+  }, [bell, showTime]);
 
   //벨소리 컨트롤 - subkds의 경우, 한번에 여러 아이템이 들어오기때문에, currentTime을 통해서 울리고 있는지 체킹 후, 울리는동안 안울리게.
   useEffect(() => {
