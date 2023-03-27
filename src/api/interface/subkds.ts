@@ -2,6 +2,7 @@
 export interface ISubkdsListItem {
   receipt_item_contents_idx: number;
   no: number;
+  receipt_number: string;
   ordered_date: string;
   process_start_date: string;
   product_name: string;

@@ -159,7 +159,7 @@ function Receipt({
             ? 'warning'
             : 'safe'
         }`}>
-        <span className="recepit_id">NO.{data.no}</span>
+        <span className="recepit_id">{data.receipt_number}</span>
       </div>
       <div className="cont">
         <div className="item_name">
