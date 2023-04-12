@@ -62,7 +62,7 @@ function KdsHeader({
           {menu.filter(el => el.idx === areaNumber)[0].areaName}
         </span>
         <span className="page_info">
-          PAGE ( {Number(slideIdx) + 1} / {totalCount} )
+          PAGE ( {Number(slideIdx) + 1} / {totalCount === 0 ? 1 : totalCount} )
         </span>
         <ul className="status">
           {status.map(el => (
