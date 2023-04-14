@@ -297,6 +297,9 @@ export const ReceiptWrap = styled.div`
           &:before {
             background-image: conic-gradient(#ef4747 20deg, transparent 120deg);
           }
+          .txt {
+            color: #ef4747;
+          }
         }
         &.warning {
           color: #ff862c;
