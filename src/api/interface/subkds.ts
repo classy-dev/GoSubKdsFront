@@ -1,11 +1,13 @@
 // subkds 리스트
 export interface ISubkdsListItem {
+  add_option_list: string;
   receipt_item_contents_idx: number;
   no: number;
   receipt_number: string;
   ordered_date: string;
   process_start_date: string;
   product_name: string;
+  sale_type: number;
   process_status: number;
   is_btn_hide: number;
 }

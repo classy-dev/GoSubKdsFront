@@ -173,7 +173,7 @@ export const Header = styled.header`
 `;
 
 export const SubKdsContent = styled.div`
-  height: calc(100vh - 10rem);
+  height: 100vh;
   background: #061138; //E0E0E0  //#061138
   .noOrder {
     display: flex;
@@ -193,7 +193,7 @@ export const SubKdsContent = styled.div`
 
 export const ReceiptWrap = styled.div`
   border-radius: 4px;
-  background: #ffffff;
+  background: #222222;
 
   &.showNone {
     display: none;
@@ -203,12 +203,12 @@ export const ReceiptWrap = styled.div`
     opacity: 0.5;
   }
 
-  &.fin {
+  /* &.fin {
     .cont * {
       color: #fff;
     }
     background: #221e1e;
-  }
+  } */
 
   .cont.on {
     color: #fff;
@@ -216,36 +216,178 @@ export const ReceiptWrap = styled.div`
   }
 
   .info_head {
-    height: 24px;
-    padding-left: 1.6rem;
-    background: #ff3434;
-    border-radius: 4px 4px 0px 0px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 17.6rem;
+    padding: 0 0 0 3.2rem;
+    border-radius: 0.4rem 0.4rem 0px 0px;
+    border-bottom: 1px solid #333333;
 
-    &.alert {
-      background: #ff3434;
+    * {
+      color: #bdbdbd;
     }
-    &.warning {
-      background: #ff862c;
+
+    &.default {
+      .wrap_saleType {
+        color: #bdbdbd;
+        border: 1px solid #333;
+        background: #333;
+      }
     }
-    &.safe {
-      background: #828282;
-      font-weight: 400;
+
+    &.fin {
+      * {
+        color: #fff;
+      }
+      .wrap_saleType {
+        width: 11.2rem;
+        height: 11.2rem;
+        position: absolute;
+        margin: auto;
+        top: 0;
+        bottom: 0;
+        right: 2rem;
+        box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        overflow: hidden;
+        background-color: #1c1b29;
+
+        &:before {
+          content: '';
+          background-image: conic-gradient(#04b0ee 20deg, transparent 120deg);
+          height: 150%;
+          width: 150%;
+          position: absolute;
+          left: -25%;
+          top: -25%;
+          animation: rotate 2s infinite linear;
+        }
+
+        @keyframes rotate {
+          100% {
+            transform: rotate(-360deg);
+          }
+        }
+        &:after {
+          content: '';
+          height: 94%;
+          width: 94%;
+          position: absolute;
+          background-color: #1c1b29;
+          border-radius: 5px;
+          top: 3%;
+          left: 3%;
+          color: #04b0ee;
+          display: grid;
+          place-items: center;
+          font-size: 20px;
+          letter-spacing: 6px;
+        }
+
+        .txt {
+          position: relative;
+          z-index: 10;
+        }
+
+        &.alert {
+          color: #ef4747;
+          border: none;
+
+          &:before {
+            background-image: conic-gradient(#ef4747 20deg, transparent 120deg);
+          }
+        }
+        &.warning {
+          color: #ff862c;
+          border: 1px solid #ff862c;
+        }
+        &.safe {
+          color: #fff;
+          border: 1px solid #fff;
+        }
+      }
     }
 
     .recepit_id {
-      color: #fff;
-      font-size: 14px;
-      //font-size: 1.4rem;
-      line-height: 24px;
+      display: block;
+      font-size: 3.2rem;
+      font-family: 'Montserrat';
+      line-height: 2.6rem;
+    }
+    .item_name {
+      margin: 1.6rem 0;
+      font-weight: 400;
+      font-size: 3rem;
+      line-height: 2.6rem;
+    }
+    .time {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      font-size: 2.4rem;
+      line-height: 2.6rem;
+    }
+    .timeBox {
+      display: flex;
+      align-items: center;
+
+      .txt_time1 {
+        min-width: 9.5rem;
+      }
+
+      .txt_time2 {
+        margin-left: 1.5rem;
+      }
+
+      .bar {
+        width: 0.2rem;
+        height: 1.7rem;
+        background: url('/images/bar_time.svg') no-repeat left top;
+      }
+    }
+
+    .wrap_saleType {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 11.2rem;
+      height: 11.2rem;
+      margin-left: auto;
+      margin-right: 3.2rem;
+      text-align: center;
+      font-weight: 700;
+      font-size: 3.6rem;
+      line-height: 3.4rem;
+      border: 1px solid #fff;
+      /* border-radius: 50%; */
     }
   }
   .cont {
     display: flex;
-    height: calc(100% - 2.4rem);
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    height: calc(100% - 17.6rem);
     color: #4f4f4f;
+    padding-left: 3.2rem;
+
+    .wrap_badge {
+      display: flex;
+      margin-top: 3rem;
+      .badge {
+        display: block;
+        height: 5.8rem;
+        padding: 0 3.2rem;
+        font-weight: 700;
+        font-size: 2.4rem;
+        line-height: 5.8rem;
+        border-radius: 2.9rem;
+
+        &.badge_cheese {
+          color: #ff6d00;
+          background: #fff7dd;
+        }
+      }
+    }
 
     .item_name {
       display: flex;
@@ -284,20 +426,30 @@ export const ReceiptWrap = styled.div`
         }
       }
     }
+
+    .txt_start {
+      margin: auto 3.6rem 3.6rem auto;
+      color: #fff;
+      font-weight: 400;
+      font-size: 65px;
+      line-height: 65px;
+    }
+
     .btn_box {
       display: flex;
       align-items: center;
-      justify-content: center;
+      /* justify-content: center; */
+      margin: auto 0 3.2rem 0;
       width: 100%;
 
       button {
-        width: 8.4rem;
-        height: 4rem;
+        width: 17.9rem;
+        height: 9rem;
         text-align: center;
         font-weight: 700;
-        line-height: 4rem;
-        border-radius: 4px;
-        font-size: 1.6rem;
+        line-height: 9rem;
+        border-radius: 0.8rem;
+        font-size: 3.6rem;
         &:disabled {
           opacity: 0.7;
         }
@@ -308,25 +460,15 @@ export const ReceiptWrap = styled.div`
         color: #221e1e;
         background: #fff;
       }
-      .btn_retry {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 8px;
-        color: #fff;
-        background: #ef4747;
-        &.ing:after {
-          content: '';
-          display: inline-block;
-          width: 2rem;
-          height: 2rem;
-          background: url('/images/spinner_waiting.gif') no-repeat center;
-          background-size: 2rem;
-        }
-      }
       .btn_fin {
         color: #fff;
         background: #5ea152;
+      }
+      .btn_retry {
+        width: 5.6rem;
+        height: 5.6rem;
+        margin: 0 3.4rem 0 auto;
+        background: url('/images/btn_restart.svg') no-repeat left top;
       }
       .btn_cancle {
         margin-right: 0.8rem;
@@ -377,11 +519,11 @@ export const PageInfo = styled.div`
 export const SlidePageWrap = styled.div`
   display: grid;
   gap: 2rem;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  height: calc(100vh - 10rem);
-  padding: 4rem 4rem 9.2rem;
-  background: #061138; //E0E0E0  //#061138
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  height: 100vh;
+  padding: 3rem;
+  background: #131313;
 `;
 
 export const SubKdsWrap = styled.div`

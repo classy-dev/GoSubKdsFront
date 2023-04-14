@@ -44,7 +44,7 @@ function Receipt({
     var seconds = Math.floor(duration.asSeconds()) % 60;
 
     return hours
-      ? `${hours} :` +
+      ? `${hours} : ` +
           `${minutes > 9 ? minutes : '0' + minutes} : ${
             seconds > 9 ? seconds : '0' + seconds
           }`
@@ -135,6 +135,18 @@ function Receipt({
     console.log(areaNumber, areaNumber);
   }, [areaNumber]);
 
+  const generateSaleType = useCallback((sale_type: number) => {
+    return sale_type === 0 ? '내점' : sale_type === 1 ? '포장' : '배달';
+  }, []);
+
+  const generateAddOptionBadge = (item: string) => {
+    return item.includes('치즈')
+      ? 'badge_cheese'
+      : item.includes('무스')
+      ? 'badge_mousse'
+      : 'badge_default';
+  };
+
   return (
     // <ReceiptWrap
     //   className={`${data.process_status === 1 ? 'fin' : ''} ${
@@ -145,55 +157,77 @@ function Receipt({
     //     handlerProccessing(data.receipt_item_contents_idx, 1)
     //   }>
     <ReceiptWrap
-      className={`${data.process_status === 1 ? 'fin' : ''}`}
       onClick={() =>
         data.process_status === 0 &&
         handlerProccessing(data.receipt_item_contents_idx, 1)
       }>
       <div
         className={`info_head ${
-          showTime.length > 7 || Number(showTime.substring(0, 2)) >= 30
-            ? 'alert'
-            : 30 > Number(showTime.substring(0, 2)) &&
-              Number(showTime.substring(0, 2)) > 20
-            ? 'warning'
-            : 'safe'
+          data.process_status === 1 ? 'fin' : 'default'
         }`}>
-        <span className="recepit_id">{data.receipt_number}</span>
+        <div className="wrap_info">
+          <div className="recepit_id">NO.{data.receipt_number}</div>
+          <div className="item_name">
+            <span className="txt">{data.product_name} </span>
+          </div>
+          <div className="time">
+            {data.process_start_date === '' ? (
+              `대기 :  ${showTime}`
+            ) : (
+              <span className="timeBox">
+                <span className="txt_time1">
+                  {processTime.substring(0, 2) !== '-1'
+                    ? processTime
+                    : '-- : --'}
+                </span>
+                <span className="bar"></span>
+                <span className="txt_time2">{showTime}</span>
+              </span>
+            )}
+          </div>
+        </div>
+        <div
+          className={`wrap_saleType  ${
+            showTime.length > 7 || Number(showTime.substring(0, 2)) >= 30
+              ? 'alert'
+              : 30 > Number(showTime.substring(0, 2)) &&
+                Number(showTime.substring(0, 2)) > 20
+              ? 'warning'
+              : 'safe'
+          } `}>
+          <span className="txt">{generateSaleType(data.sale_type)}</span>
+        </div>
       </div>
       <div className="cont">
-        <div className="item_name">
-          <span className="txt">{data.product_name} </span>
-        </div>
-        <div className="time">
-          {data.process_start_date === '' ? (
-            `대기 시간 :  ${showTime}`
-          ) : (
-            <span className="timeBox">
-              <span>치리 중 : {processTime}</span>
-              <span>총 시간 : {showTime}</span>
+        <div className="wrap_badge">
+          {data.add_option_list.split(',').map((el, i) => (
+            <span key={i} className={`badge ${generateAddOptionBadge(el)}`}>
+              {el.includes('치즈') ? '치즈' : el}
             </span>
-          )}
+          ))}
         </div>
-        {data.process_status !== 0 && data.is_btn_hide === 0 && (
-          <div className="btn_box">
-            <button
-              className="btn_retry"
-              onClick={() =>
-                handlerProccessing(data.receipt_item_contents_idx, 1)
-              }>
-              재처리
-            </button>
-
-            <button
-              className="btn_fin"
-              onClick={() =>
-                handlerProccessing(data.receipt_item_contents_idx, 2)
-              }>
-              완료
-            </button>
-          </div>
-        )}
+        {data.process_status === 0
+          ? data.is_btn_hide === 0 && (
+              <div className="txt_start">START &gt;</div>
+            )
+          : data.is_btn_hide === 0 && (
+              <div className="btn_box">
+                <button
+                  className="btn_fin"
+                  onClick={() =>
+                    handlerProccessing(data.receipt_item_contents_idx, 2)
+                  }>
+                  완료
+                </button>
+                <button
+                  className="btn_retry"
+                  onClick={() =>
+                    handlerProccessing(data.receipt_item_contents_idx, 1)
+                  }>
+                  <span className="hiddenZoneV">재처리</span>
+                </button>
+              </div>
+            )}
       </div>
       <audio src="/sound/bell.mp3" id="myAudio" ref={audioRef} loop={false}>
         오디오 지원되지 않는 브라우저

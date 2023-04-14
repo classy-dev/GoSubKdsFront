@@ -35,7 +35,7 @@ function Home() {
 
   const [areaNumber, setAreaNumber] = useState(1);
 
-  const Grid = 16;
+  const Grid = 6;
   const [swiperRef, setSwiperRef] = useState<Swiper | null>(null);
   const [slideIdx, setSlideIdx] = useState(0);
 
@@ -80,14 +80,14 @@ function Home() {
     <div>
       {data?.list ? (
         <SubKdsWrap>
-          <SubKdsHeader
+          {/* <SubKdsHeader
             swiperRef={swiperRef}
             slideIdx={slideIdx}
             infoStatus={infoStatus}
             areaNumber={areaNumber}
             setAreaNumber={setAreaNumber}
             totalCount={Math.ceil(Number(data?.list?.length) / Grid)}
-          />
+          /> */}
 
           <SubKdsContent>
             {data?.list?.length === 0 ? (
