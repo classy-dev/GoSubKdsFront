@@ -1,5 +1,5 @@
-import {Dispatch, SetStateAction} from 'react';
-import {Header} from './styles/common';
+import {Dispatch, SetStateAction, useRef, useState} from 'react';
+import {BtnHeadOpen, Dimm, Header, HeaderWrap} from './styles/common';
 import {Swiper} from 'swiper/types';
 import {useQueryClient} from '@tanstack/react-query';
 import {menu} from 'PagesFarm/Home';
@@ -35,11 +35,14 @@ function KdsHeader({
   infoStatus,
   totalCount,
 }: IinfoStatus) {
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
+  const [isHeaderOpen, setIsHeaderOpen] = useState(false);
+  const soundEffectRef = useRef<HTMLAudioElement | null>(null);
 
   const handlerMenuMove = (idx: number) => {
     swiperRef?.slideTo(0, 0, false);
     setAreaNumber(idx);
+    soundEffectPlay('/sound/btn_menu.mp3');
   };
 
   const handlerAlarm = () => {
@@ -50,50 +53,76 @@ function KdsHeader({
     );
   };
 
-  console.log('swiperRef?.realIndex', swiperRef);
+  const soundEffectPlay = (src: string) => {
+    if (soundEffectRef.current) {
+      soundEffectRef.current.src = src;
+      soundEffectRef.current.play();
+    }
+  };
 
   return (
-    <Header>
-      <div className="left">
-        <h1>
-          <span className="hiddenZone">GOPIZZA</span>
-        </h1>
-        <span className="current_nav">
-          {menu.filter(el => el.idx === areaNumber)[0].areaName}
-        </span>
-        <span className="page_info">
-          PAGE ( {Number(slideIdx) + 1} / {totalCount === 0 ? 1 : totalCount} )
-        </span>
-        <ul className="status">
-          {status.map(el => (
-            <li key={el.id}>
-              <span className="txt">
-                {el.txt} : {infoStatus[el.status]}
-              </span>
+    <HeaderWrap className={isHeaderOpen ? 'on' : ''}>
+      <Header>
+        <div className="left">
+          <h1>
+            <span className="hiddenZone">GOPIZZA</span>
+          </h1>
+          <span className="current_nav">
+            {menu.filter(el => el.idx === areaNumber)[0].areaName}
+          </span>
+          <span className="page_info">
+            PAGE ( {Number(slideIdx) + 1} / {totalCount === 0 ? 1 : totalCount}{' '}
+            )
+          </span>
+          <ul className="status">
+            {status.map(el => (
+              <li key={el.id}>
+                <span className="txt">
+                  {el.txt} : {infoStatus[el.status]}
+                </span>
+              </li>
+            ))}
+            <li>
+              <button
+                className={`btn_speak ${kdsSettingStore.alarm ? 'on' : ''}`}
+                onClick={handlerAlarm}>
+                <span className="hiddenZone">Alarm</span>
+              </button>
             </li>
-          ))}
-          <li>
-            <button
-              className={`btn_speak ${kdsSettingStore.alarm ? 'on' : ''}`}
-              onClick={handlerAlarm}>
-              <span className="hiddenZone">Alarm</span>
-            </button>
-          </li>
-        </ul>
-      </div>
-      <div className="right">
-        <ul className="menu">
-          {menu.map((el, i) => (
-            <li
-              key={el.idx}
-              className={`${areaNumber === el.idx ? 'on' : ''}`}
-              onClick={() => handlerMenuMove(el.idx)}>
-              {el.areaName}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </Header>
+          </ul>
+        </div>
+        <div className="right">
+          <ul className="menu">
+            {menu.map((el, i) => (
+              <li
+                key={el.idx}
+                className={`${areaNumber === el.idx ? 'on' : ''}`}
+                onClick={() => handlerMenuMove(el.idx)}>
+                {el.areaName}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Header>
+      <BtnHeadOpen
+        onClick={() => {
+          setIsHeaderOpen(prev => !prev);
+          soundEffectPlay('/sound/btn_head_open.mp3');
+        }}>
+        <span className="hiddenZone">열기</span>
+      </BtnHeadOpen>
+      <audio src="/sound/next.mp3" id="myAudio" ref={soundEffectRef}>
+        오디오 지원되지 않는 브라우저
+      </audio>
+      {isHeaderOpen && (
+        <Dimm
+          onClick={() => {
+            setIsHeaderOpen(prev => !prev);
+            soundEffectPlay('/sound/btn_head_open.mp3');
+          }}
+        />
+      )}
+    </HeaderWrap>
   );
 }
 

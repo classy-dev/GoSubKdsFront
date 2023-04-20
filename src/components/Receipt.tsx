@@ -6,28 +6,33 @@ import duration from 'dayjs/plugin/duration';
 
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {fetchSubKdsProcess} from 'ApiFarm/subkds';
-import {listeners} from 'process';
 import {kdsSettingStore} from 'MobxFarm/store';
 import {toast} from 'react-toastify';
+import RippleButton from './RippleButton';
 
 dayjs.extend(duration);
 
 function Receipt({
   data,
   areaNumber,
+  soundEffectPlay,
 }: {
   data: ISubkdsListItem;
   areaNumber: number;
+  soundEffectPlay: (src: string) => void;
 }) {
   const queryClient = useQueryClient();
   const tick = useRef<NodeJS.Timer>();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const timer = useRef<NodeJS.Timer | null>(null);
 
   const [showTime, setShowTime] = useState('');
   const [processTime, setProcessTime] = useState('');
   const [time, setTime] = useState(0);
   const [load, setLoad] = useState(true);
   const [bell, setBell] = useState(false);
+  const [retry, setRetry] = useState(false);
 
   const passedTime = useCallback((orderTime: string) => {
     // 숫자를 시간으로 표현
@@ -74,25 +79,6 @@ function Receipt({
     };
   }, [time, data]);
 
-  //주문들어왔는지 체킹, AISTT 에서 STATION 으로 넘어오는데, STATION 신규주문은 processTime을 통해 알 수 있음.
-  // useEffect(() => {
-  //   if (areaNumber !== 2) {
-  //     const bellTime = showTime.split(':');
-  //     if (1 > Number(bellTime[0]) && 9 >= Number(bellTime[1]) && !bell) {
-  //       setBell(true);
-  //     } else if (Number(bellTime[1]) > 10 && bell) {
-  //       setBell(false);
-  //     }
-  //   } else {
-  //     const stationTime = processTime.split(':');
-  //     if (1 > Number(stationTime[0]) && 9 >= Number(stationTime[1]) && !bell) {
-  //       setBell(true);
-  //     } else if (Number(stationTime[1]) > 10 && bell) {
-  //       setBell(false);
-  //     }
-  //   }
-  // }, [areaNumber, bell, showTime]);
-
   useEffect(() => {
     const bellTime = showTime.split(':');
     if (1 > Number(bellTime[0]) && 9 >= Number(bellTime[1]) && !bell) {
@@ -131,9 +117,37 @@ function Receipt({
     );
   }, []);
 
+  const handleProcessStart = () => {
+    if (data.process_status === 0) {
+      handlerProccessing(data.receipt_item_contents_idx, 1);
+      soundEffectPlay('/sound/next2.mp3');
+    }
+  };
+
+  const handleRetry = () => {
+    if (timer.current !== null) {
+      clearTimeout(timer.current); // 이전에 생성된 타이머를 제거
+    }
+    soundEffectPlay('/sound/retry2.mp3');
+    setRetry(true);
+    handlerProccessing(data.receipt_item_contents_idx, 1);
+    timer.current = setTimeout(() => {
+      setRetry(false);
+    }, 500);
+  };
+
   useEffect(() => {
-    console.log(areaNumber, areaNumber);
-  }, [areaNumber]);
+    return () => {
+      if (timer.current !== null) {
+        clearTimeout(timer.current); // 컴포넌트가 언마운트되는 시점에 타이머 제거
+      }
+    };
+  }, []);
+
+  const handleFin = () => {
+    handlerProccessing(data.receipt_item_contents_idx, 2);
+    soundEffectPlay('/sound/final.mp3');
+  };
 
   const generateSaleType = useCallback((sale_type: number) => {
     return sale_type === 0 ? '내점' : sale_type === 1 ? '포장' : '배달';
@@ -144,27 +158,16 @@ function Receipt({
       ? 'badge_cheese'
       : item.includes('무스')
       ? 'badge_mousse'
+      : item.includes('샷 추가')
+      ? 'badge_drink'
       : 'badge_default';
   };
 
   return (
-    // <ReceiptWrap
-    //   className={`${data.process_status === 1 ? 'fin' : ''} ${
-    //     areaNumber === 2 && data.process_status === 0 ? 'showNone' : ''
-    //   }`}
-    //   onClick={() =>
-    //     data.process_status === 0 &&
-    //     handlerProccessing(data.receipt_item_contents_idx, 1)
-    //   }>
     <ReceiptWrap
-      onClick={() =>
-        data.process_status === 0 &&
-        handlerProccessing(data.receipt_item_contents_idx, 1)
-      }>
-      <div
-        className={`info_head ${
-          data.process_status === 1 ? 'fin' : 'default'
-        }`}>
+      className={`${data.process_status === 1 ? 'fin' : 'default'}`}
+      onClick={handleProcessStart}>
+      <div className={`info_head`}>
         <div className="wrap_info">
           <div className="recepit_id">NO.{data.receipt_number}</div>
           <div className="item_name">
@@ -175,7 +178,7 @@ function Receipt({
               `대기 :  ${showTime}`
             ) : (
               <span className="timeBox">
-                <span className="txt_time1">
+                <span className={`txt_time1 ${retry ? 'on' : 'off'}`}>
                   {processTime.substring(0, 2) !== '-1'
                     ? processTime
                     : '-- : --'}
@@ -199,13 +202,15 @@ function Receipt({
         </div>
       </div>
       <div className="cont">
-        <div className="wrap_badge">
-          {data.add_option_list.split(',').map((el, i) => (
-            <span key={i} className={`badge ${generateAddOptionBadge(el)}`}>
-              {el.includes('치즈') ? '치즈' : el}
-            </span>
-          ))}
-        </div>
+        {data.process_status === 1 && (
+          <div className="wrap_badge">
+            {data.add_option_list?.split(',').map((el, i) => (
+              <span key={i} className={`badge ${generateAddOptionBadge(el)}`}>
+                {el.includes('치즈') ? '치즈' : el}
+              </span>
+            ))}
+          </div>
+        )}
         {data.process_status === 0
           ? data.is_btn_hide === 0 && (
               <div className="txt_start">START &gt;</div>
@@ -213,22 +218,15 @@ function Receipt({
           : data.is_btn_hide === 0 && (
               <div className="btn_box">
                 <button
-                  className="btn_fin"
-                  onClick={() =>
-                    handlerProccessing(data.receipt_item_contents_idx, 2)
-                  }>
-                  완료
-                </button>
-                <button
-                  className="btn_retry"
-                  onClick={() =>
-                    handlerProccessing(data.receipt_item_contents_idx, 1)
-                  }>
+                  className={`btn_retry ${retry ? 'on' : 'off'}`}
+                  onClick={handleRetry}>
                   <span className="hiddenZoneV">재처리</span>
                 </button>
+                <RippleButton onClick={handleFin}>완료</RippleButton>
               </div>
             )}
       </div>
+
       <audio src="/sound/bell.mp3" id="myAudio" ref={audioRef} loop={false}>
         오디오 지원되지 않는 브라우저
       </audio>

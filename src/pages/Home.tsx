@@ -1,4 +1,5 @@
 import {
+  Dimm,
   PageInfo,
   SlidePageWrap,
   SubKdsContent,
@@ -80,23 +81,19 @@ function Home() {
     <div>
       {data?.list ? (
         <SubKdsWrap>
-          {/* <SubKdsHeader
+          <SubKdsHeader
             swiperRef={swiperRef}
             slideIdx={slideIdx}
             infoStatus={infoStatus}
             areaNumber={areaNumber}
             setAreaNumber={setAreaNumber}
             totalCount={Math.ceil(Number(data?.list?.length) / Grid)}
-          /> */}
-
+          />
           <SubKdsContent>
             {data?.list?.length === 0 ? (
               <div className="noOrder">
-                <div className="title">
-                  <img src="/images/intro-title.png" alt="1인피자의 시작" />
-                </div>
                 <div className="logo">
-                  <img src="/images/intro-logo.png" alt="GOPIZZA" />
+                  <img src="/images/intro-logo.svg" alt="GOPIZZA" />
                 </div>
               </div>
             ) : (
@@ -123,6 +120,7 @@ function Home() {
               </SwiperContainer>
             )}
           </SubKdsContent>
+
           {/* <PageInfo>
             {slideIdx + 1} / {Math.ceil(data?.list.length / Grid)}
           </PageInfo> */}
