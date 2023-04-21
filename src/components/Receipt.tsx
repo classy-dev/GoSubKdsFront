@@ -100,8 +100,62 @@ function Receipt({
     }
   }, [bell]);
 
-  //확인 (처리 -> 처리 중 상태 변경)
-  const processItem = useMutation(['processItem'], fetchSubKdsProcess);
+  //확인 (처리 -> 처리 중 상태 변경) - 낙관적 업데이트
+  const processItem = useMutation(['processItem'], fetchSubKdsProcess, {
+    onMutate: async variables => {
+      // Optimistically update the cache before the mutation
+      queryClient.cancelQueries(['subKdsListData']);
+
+      const previousData = queryClient.getQueryData(['subKdsListData']);
+
+      // Get the current date and time in the format 'YYYY-MM-DD HH:mm:ss'
+      const currentDate = new Date()
+        .toISOString()
+        .replace('T', ' ')
+        .split('.')[0];
+
+      console.log('currentDate', currentDate, currentDate);
+
+      const newData = {
+        list: [
+          ...(previousData as ISubkdsListRes).list
+            .map(item =>
+              item.receipt_item_contents_idx ===
+              variables.receipt_item_contents_idx
+                ? {
+                    ...item,
+                    process_status: variables.process_status,
+                    process_start_date:
+                      variables.process_status === 1
+                        ? currentDate
+                        : item.process_start_date,
+                  }
+                : item,
+            )
+            .filter(
+              item =>
+                !(variables.process_status === 2 && item.process_status === 2),
+            ),
+        ],
+        total_count: (previousData as ISubkdsListRes).total_count,
+      };
+
+      queryClient.setQueryData(['subKdsListData'], newData);
+
+      return {previousData};
+    },
+    onError: (error, variables, context) => {
+      // If the mutation fails, revert back to the previous state
+      queryClient.setQueryData(
+        ['subKdsListData'],
+        (context as any).previousData,
+      );
+    },
+    onSuccess: data => {
+      // Invalidate the cache to trigger a refetch after the mutation
+      queryClient.invalidateQueries(['subKdsListData']);
+    },
+  });
 
   const handlerProccessing = useCallback((idx: number, status: number) => {
     processItem.mutate(
@@ -163,6 +217,8 @@ function Receipt({
       : 'badge_default';
   };
 
+  console.log('processTime', processTime.substring(0, 2));
+
   return (
     <ReceiptWrap
       className={`${data.process_status === 1 ? 'fin' : 'default'}`}
@@ -179,9 +235,9 @@ function Receipt({
             ) : (
               <span className="timeBox">
                 <span className={`txt_time1 ${retry ? 'on' : 'off'}`}>
-                  {processTime.substring(0, 2) !== '-1'
+                  {processTime.substring(0, 1) !== '9'
                     ? processTime
-                    : '-- : --'}
+                    : '00 : 00'}
                 </span>
                 <span className="bar"></span>
                 <span className="txt_time2">{showTime}</span>

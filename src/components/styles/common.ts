@@ -682,7 +682,7 @@ export const PageInfo = styled.div`
   font-weight: bold;
   color: #fff;
   border-radius: 36px;
-  background: #404c77;
+  background: #222222;
 `;
 
 export const SlidePageWrap = styled.div`
