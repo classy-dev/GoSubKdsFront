@@ -447,7 +447,7 @@ export const ReceiptWrap = styled.div`
         }
         .txt {
           color: #ef4747;
-          animation: blink 2s infinite;
+          animation: blink 1.5s infinite;
         }
       }
       &.warning {

@@ -11,7 +11,7 @@ import {ISubkdsListRes} from 'ApiFarm/interface/subkds';
 import {useQuery} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
 import {fetchSubKdsList} from 'ApiFarm/subkds';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {Swiper as SwiperContainer, SwiperSlide} from 'swiper/react';
 import {Swiper} from 'swiper/types';
 import {Mousewheel} from 'swiper';
@@ -77,6 +77,11 @@ function Home() {
     refetch();
   }, [areaNumber]);
 
+  const totalCount = useMemo(
+    () => Math.ceil(Number(data?.list?.length) / Grid),
+    [data?.list?.length],
+  );
+
   return (
     <div>
       {data?.list ? (
@@ -121,9 +126,9 @@ function Home() {
             )}
           </SubKdsContent>
 
-          {/* <PageInfo>
-            {slideIdx + 1} / {Math.ceil(data?.list.length / Grid)}
-          </PageInfo> */}
+          <PageInfo>
+            {Number(slideIdx) + 1} / {totalCount === 0 ? 1 : totalCount}
+          </PageInfo>
         </SubKdsWrap>
       ) : (
         <div></div>

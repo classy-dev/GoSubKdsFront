@@ -202,15 +202,13 @@ function Receipt({
         </div>
       </div>
       <div className="cont">
-        {data.process_status === 1 && (
-          <div className="wrap_badge">
-            {data.add_option_list?.split(',').map((el, i) => (
-              <span key={i} className={`badge ${generateAddOptionBadge(el)}`}>
-                {el.includes('치즈') ? '치즈' : el}
-              </span>
-            ))}
-          </div>
-        )}
+        <div className="wrap_badge">
+          {data.add_option_list?.split(',').map((el, i) => (
+            <span key={i} className={`badge ${generateAddOptionBadge(el)}`}>
+              {el.includes('치즈') ? '치즈' : el}
+            </span>
+          ))}
+        </div>
         {data.process_status === 0
           ? data.is_btn_hide === 0 && (
               <div className="txt_start">START &gt;</div>
