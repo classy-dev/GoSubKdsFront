@@ -70,10 +70,6 @@ function KdsHeader({
           <span className="current_nav">
             {menu.filter(el => el.idx === areaNumber)[0].areaName}
           </span>
-          <span className="page_info">
-            PAGE ( {Number(slideIdx) + 1} / {totalCount === 0 ? 1 : totalCount}{' '}
-            )
-          </span>
           <ul className="status">
             {status.map(el => (
               <li key={el.id}>
@@ -82,13 +78,6 @@ function KdsHeader({
                 </span>
               </li>
             ))}
-            <li>
-              <button
-                className={`btn_speak ${kdsSettingStore.alarm ? 'on' : ''}`}
-                onClick={handlerAlarm}>
-                <span className="hiddenZone">Alarm</span>
-              </button>
-            </li>
           </ul>
         </div>
         <div className="right">

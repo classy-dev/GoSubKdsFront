@@ -603,7 +603,7 @@ export const ReceiptWrap = styled.div`
         overflow: hidden;
         width: 5.6rem;
         height: 5.6rem;
-        background: url('/images/btn_restart.svg') no-repeat left top;
+        background: url('/images/btn_restart.svg') no-repeat left top / 100%;
         transition: transform 0.1s ease-in-out;
 
         &::before {
@@ -697,7 +697,6 @@ export const SlidePageWrap = styled.div`
 
 export const SubKdsWrap = styled.div`
   position: relative;
-  max-width: 1920px;
   max-height: 1080px;
   @media (min-width: 1200px) and (max-width: 1500px) {
     ${SlidePageWrap} {
