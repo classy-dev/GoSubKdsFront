@@ -671,7 +671,7 @@ export const PageInfo = styled.div`
   align-items: center;
   justify-content: center;
   position: fixed;
-  bottom: 32px;
+  bottom: 10px;
   left: 50%;
   z-index: 1000;
   width: 70px;
@@ -691,7 +691,7 @@ export const SlidePageWrap = styled.div`
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
   height: 100vh;
-  padding: 4.4rem 4rem;
+  padding: 4.4rem 4rem 5.5rem;
   background: #131313;
 `;
 
