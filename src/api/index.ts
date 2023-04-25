@@ -27,7 +27,7 @@ const getBaseUrl = () => {
     //reVal = 'http://dev.api.gopizza.kr';
     reVal = 'https://dev.api.gopizza.kr';
     //reVal = "http://api.gopizza.kr";
-    // reVal = "http://192.168.0.10:8000";
+    // reVal = "http://192.168.0.10:8000" ;
   }
 
   return reVal;
