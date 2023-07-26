@@ -1,14 +1,16 @@
-import {Route, useHistory} from 'react-router-dom';
-import {ToastContainer} from 'react-toastify';
+import { Route, useHistory } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import {
   QueryClient,
   QueryClientProvider,
   QueryCache,
-} from '@tanstack/react-query';
-import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
-import Home from 'PagesFarm/Home';
-import Login from 'PagesFarm/Login';
-import 'react-toastify/dist/ReactToastify.css';
+} from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import Home from "PagesFarm/Home";
+import Login from "PagesFarm/Login";
+import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
+import { authStore } from "MobxFarm/store";
 
 const App = () => {
   const history = useHistory();
@@ -21,10 +23,13 @@ const App = () => {
     },
     queryCache: new QueryCache({
       onError: (e: any) => {
-        // history.push('/');
         console.error(e);
       },
     }),
+  });
+
+  useEffect(() => {
+    authStore.init();
   });
 
   return (
@@ -32,7 +37,6 @@ const App = () => {
       <ToastContainer position="top-center" />
       <Route path="/" exact={true} component={Login} />
       <Route path="/home" exact={true} component={Home} />
-
       <ReactQueryDevtools />
     </QueryClientProvider>
   );
