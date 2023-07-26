@@ -5,7 +5,6 @@ import { runInAction } from "mobx";
 import { authStore } from "MobxFarm/store";
 import { toast } from "react-toastify";
 import { observer } from "mobx-react";
-import AxiosUtil from "ApiFarm/.";
 import { LoginWrap } from "ComponentsFarm/styles/common";
 import { fetchMyInfo, login } from "ApiFarm/auth";
 

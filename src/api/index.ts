@@ -24,8 +24,8 @@ const getBaseUrl = () => {
     (hostSplit && hostSplit[0].indexOf("localhost") >= 0) ||
     (hostSplit && hostSplit[0] === "local")
   ) {
-    //reVal = 'http://dev.api.gopizza.kr';
-    reVal = "http://feature.api.gopizza.kr";
+    reVal = "http://dev.api.gopizza.kr";
+    // reVal = "http://feature.api.gopizza.kr";
     //reVal = "http://api.gopizza.kr";
     // reVal = "http://192.168.0.10:8000";
   }
