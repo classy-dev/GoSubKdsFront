@@ -4,27 +4,28 @@ import {
   SlidePageWrap,
   SubKdsContent,
   SubKdsWrap,
-} from 'ComponentsFarm/styles/common';
-import SubKdsHeader from 'ComponentsFarm/SubKdsHeader';
-import Receipt from 'ComponentsFarm/Receipt';
-import {ISubkdsListRes} from 'ApiFarm/interface/subkds';
-import {useQuery} from '@tanstack/react-query';
-import {AxiosError} from 'axios';
-import {fetchSubKdsList} from 'ApiFarm/subkds';
-import {useEffect, useMemo, useState} from 'react';
-import {Swiper as SwiperContainer, SwiperSlide} from 'swiper/react';
-import {Swiper} from 'swiper/types';
-import {Mousewheel} from 'swiper';
-import 'swiper/css';
-import SwiperSlideItem from 'ComponentsFarm/SwiperSlideItem';
-import {authStore} from 'MobxFarm/store';
-import {useHistory} from 'react-router-dom';
+} from "ComponentsFarm/styles/common";
+import SubKdsHeader from "ComponentsFarm/SubKdsHeader";
+import Receipt from "ComponentsFarm/Receipt";
+import { ISubkdsListRes } from "ApiFarm/interface/subkds";
+import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { fetchSubKdsList } from "ApiFarm/subkds";
+import { useEffect, useMemo, useState } from "react";
+import { Swiper as SwiperContainer, SwiperSlide } from "swiper/react";
+import { Swiper } from "swiper/types";
+import { Mousewheel } from "swiper";
+import "swiper/css";
+import SwiperSlideItem from "ComponentsFarm/SwiperSlideItem";
+import { authStore } from "MobxFarm/store";
+import { useHistory } from "react-router-dom";
+import { fetchMyStore } from "ApiFarm/auth";
 
 export const menu = [
-  {idx: 1, areaName: 'AISTT'},
-  {idx: 2, areaName: 'STATION'},
-  {idx: 4, areaName: '튀김기'},
-  {idx: 8, areaName: '음료'},
+  { idx: 1, areaName: "AISTT" },
+  { idx: 2, areaName: "STATION" },
+  { idx: 4, areaName: "튀김기" },
+  { idx: 8, areaName: "음료" },
 ];
 
 function Home() {
@@ -40,18 +41,24 @@ function Home() {
   const [swiperRef, setSwiperRef] = useState<Swiper | null>(null);
   const [slideIdx, setSlideIdx] = useState(0);
 
-  console.log('slideIdx slideIdx slideIdx', slideIdx);
+  useQuery(["selected-store"], fetchMyStore, {
+    enabled: authStore.isLoggedIn,
+    onSuccess: (res) => {
+      authStore.selected_store_idx = res.selected_store_idx;
+      authStore.selected_store_name = res.selected_store_name;
+    },
+  });
 
   //셋팅 값 가져오기
   useEffect(() => {
-    if (!authStore.session) {
-      return history.push('/');
+    if (!authStore.isLoggedIn) {
+      return history.push("/");
     }
   }, [history]);
 
   // 영수증 리스트
-  const {data, refetch, isFetching} = useQuery<ISubkdsListRes, AxiosError>(
-    ['subKdsListData'],
+  const { data, refetch, isFetching } = useQuery<ISubkdsListRes, AxiosError>(
+    ["subKdsListData"],
     () =>
       fetchSubKdsList(areaNumber, {
         current_page_number: 1,
@@ -61,14 +68,14 @@ function Home() {
       //refetchInterval: 1000 * 60 * 15,
       refetchInterval: 1000 * 5,
       refetchIntervalInBackground: true,
-    },
+    }
   );
 
   useEffect(() => {
     if (data) {
       setInfoStatus({
-        ing: data.list.filter(el => el.process_status === 1).length,
-        wait: data.list.filter(el => el.process_status === 0).length,
+        ing: data.list.filter((el) => el.process_status === 1).length,
+        wait: data.list.filter((el) => el.process_status === 0).length,
       });
     }
   }, [data]);
@@ -79,7 +86,7 @@ function Home() {
 
   const totalCount = useMemo(
     () => Math.ceil(Number(data?.list?.length) / Grid),
-    [data?.list?.length],
+    [data?.list?.length]
   );
 
   return (
@@ -108,7 +115,8 @@ function Home() {
                 cssMode={true}
                 mousewheel={true}
                 onSlideChange={() => setSlideIdx(Number(swiperRef?.realIndex))}
-                modules={[Mousewheel]}>
+                modules={[Mousewheel]}
+              >
                 {new Array(Math.ceil(Number(data?.list?.length) / Grid))
                   .fill(null)
                   .map((_, i) => (
@@ -116,7 +124,7 @@ function Home() {
                       <SwiperSlideItem
                         receiptsData={data?.list?.slice(
                           Grid * i,
-                          Grid * (i + 1),
+                          Grid * (i + 1)
                         )}
                         areaNumber={areaNumber}
                       />

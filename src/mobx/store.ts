@@ -1,107 +1,99 @@
 // import { setAccountStoreInfo } from "LibFarm/.";
 // import router from "next/router";
-import {setAccountStoreInfo} from 'LibFarm/accountInfo';
-import {toast} from 'react-toastify';
-
-const {observable} = require('mobx');
+import { ILoginUserResponse } from "ApiFarm/interface/auth";
+import { setAccountStoreInfo } from "LibFarm/accountInfo";
+import { toast } from "react-toastify";
+import { observable } from "mobx";
 
 export const numberStore = observable({
   number: 0,
-  name: 'ddd',
+  name: "ddd",
   reset() {
     this.number = 0;
   },
 });
 
-interface IStoreInfo {
-  store_id: string;
-  store_name: string;
-  store_token: string;
+interface IAuthStore {
+  token: string | null;
+  user_info: ILoginUserResponse["user_info"] | null;
+  store_info: ILoginUserResponse["store"] | null;
+  isLoggedIn: boolean;
+  selected_store_idx: number | null;
+  selected_store_name: string | null;
+  init: () => void;
+  login: (authData: ILoginUserResponse & { token: string }) => void;
+  logOut: () => void;
 }
 
-export const authStore = observable({
-  loading: true,
-  session: null,
-  storeInfo: {store_id: '', store_name: '', store_token: ''},
-  newLogin() {
-    if (localStorage.getItem('auth_token') !== null) {
-      const authData = {
-        auth_token: String(localStorage.getItem('auth_token')),
-        info: {...JSON.parse(String(localStorage.getItem('info')))},
-        token: String(localStorage.getItem('store_token')),
-      };
-      this.login(authData);
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('info');
-      localStorage.removeItem('store_token');
+const TOKEN_STORAGE_KEY = "KDS_AUTH_TOKEN";
+const USER_STORAGE_KEY = "KDS_USER_INFO";
+const STORE_STORAGE_KEY = "KDS_USER_STORE";
+
+export const authStore = observable<IAuthStore>({
+  token: null,
+  user_info: null,
+  store_info: null,
+  selected_store_idx: null,
+  selected_store_name: null,
+  get isLoggedIn() {
+    return !!this.user_info && !!this.token;
+  },
+  init() {
+    try {
+      this.token = localStorage.getItem(TOKEN_STORAGE_KEY) ?? null;
+      this.user_info = JSON.parse(
+        String(localStorage.getItem(USER_STORAGE_KEY))
+      );
+      this.store_info = JSON.parse(
+        localStorage.getItem(STORE_STORAGE_KEY) ?? "null"
+      );
+    } catch (e) {
+      this.token = null;
+      this.user_info = null;
+      this.store_info = null;
     }
   },
-  login(authData: any) {
+  login(authData) {
     if (Object.keys(authData).length !== 0) {
-      this.session = authData;
-      this.storeInfo = {
-        store_id: String(authData?.info.store_id),
-        store_name: String(authData?.info.store_name),
-        store_token: String(authData?.token),
-      };
+      this.token = authData.token;
+      this.user_info = authData.user_info;
+      this.store_info = authData.store;
+      this.selected_store_idx = authData.selected_store_idx;
+      this.selected_store_name = authData.selected_store_name;
 
-      localStorage.setItem('session', JSON.stringify(authData));
-      setAccountStoreInfo(
-        String(authData?.info.store_id),
-        String(authData?.info.store_name),
-        String(authData?.token),
+      localStorage.setItem(TOKEN_STORAGE_KEY, authData.token);
+      localStorage.setItem(
+        USER_STORAGE_KEY,
+        JSON.stringify(authData.user_info)
       );
-      if (this.session.token !== '' && this.session.info.user_id) {
-        window.location.replace('./home');
-      } else if (
-        this.session.token === '' &&
-        this.session.info.user_id !== ''
-      ) {
-        toast.error('본사 직원은 접속권한이 없습니다.');
+      localStorage.setItem(STORE_STORAGE_KEY, JSON.stringify(authData.store));
+
+      if (this.token !== "" && this.user_info.user_idx) {
+        window.location.replace("/home");
+      } else if (this.token === "" && !this.user_info.user_idx) {
+        toast.error("본사 직원은 접속권한이 없습니다.");
       }
-      this.loading = false;
     }
   },
   logOut() {
-    this.session = null;
-    this.storeInfo = {store_id: '', store_name: '', store_token: ''};
-    localStorage.removeItem('session');
-    localStorage.removeItem('storeInfo');
-    window.location.replace('/');
-    this.loading = true;
-  },
-  sessionGet() {
-    if (this.session === null) {
-      this.session = JSON.parse(String(localStorage.getItem('session')));
-      this.loading = false;
-      return this.session;
-    } else {
-      this.loading = false;
-      return this.session;
-    }
-  },
-  storeGet() {
+    this.token = null;
+    this.user_info = null;
+    this.store_info = null;
+    this.selected_store_idx = null;
+    this.selected_store_name = null;
+
     if (
-      this.storeInfo !== null &&
-      Object.values(this.storeInfo).every(x => x === '')
+      localStorage.getItem("session") !== null ||
+      localStorage.getItem("storeInfo") !== null
     ) {
-      this.storeInfo = JSON.parse(String(localStorage.getItem('storeInfo')));
-      return this.storeInfo;
-    } else {
-      return this.storeInfo;
+      localStorage.clear();
     }
-  },
-  storeChange(data: IStoreInfo) {
-    this.storeInfo = {
-      store_id: String(data.store_id),
-      store_name: String(data.store_name),
-      store_token: String(data.store_token),
-    };
-    setAccountStoreInfo(
-      String(data.store_id),
-      String(data.store_name),
-      String(data.store_token),
-    );
+
+    localStorage.removeItem(TOKEN_STORAGE_KEY);
+    localStorage.removeItem(USER_STORAGE_KEY);
+    localStorage.removeItem(STORE_STORAGE_KEY);
+
+    window.location.replace("/");
   },
 });
 
